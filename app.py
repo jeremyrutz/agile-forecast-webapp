@@ -57,6 +57,9 @@ def run_simulation(params):
 
     # Plot histogram and save to static folder
     plot_filename = 'static/completion_histogram.png'
+    # Ensure static directory exists
+    static_dir = os.path.dirname(plot_filename)
+    os.makedirs(static_dir, exist_ok=True)
     # Delete previous plot if exists
     if os.path.exists(plot_filename):
         os.remove(plot_filename)
