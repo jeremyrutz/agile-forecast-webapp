@@ -2,6 +2,8 @@
 from flask import Flask, render_template, request
 import numpy as np
 import random
+import matplotlib
+matplotlib.use('Agg')  # Use non-GUI backend for server environments
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import os
