@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request
 import numpy as np
 import random
+import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import os
 import csv
@@ -43,12 +44,34 @@ def run_simulation(params):
         completion_date = base_date + timedelta(weeks=current_week)
         completion_dates.append(completion_date)
     completion_dates_np = np.array([(date - base_date).days for date in completion_dates])
+    projected_completion_date_95 = base_date + timedelta(days=int(np.percentile(completion_dates_np, 95)))
+    projected_completion_date_85 = base_date + timedelta(days=int(np.percentile(completion_dates_np, 85)))
+    projected_completion_date_60 = base_date + timedelta(days=int(np.percentile(completion_dates_np, 60)))
     projected_dates = {
-        '95%': base_date + timedelta(days=int(np.percentile(completion_dates_np, 95))),
-        '85%': base_date + timedelta(days=int(np.percentile(completion_dates_np, 85))),
-        '60%': base_date + timedelta(days=int(np.percentile(completion_dates_np, 60))),
+        '95%': projected_completion_date_95,
+        '85%': projected_completion_date_85,
+        '60%': projected_completion_date_60,
     }
-    return projected_dates
+
+    # Plot histogram and save to static folder
+    plot_filename = 'static/completion_histogram.png'
+    # Delete previous plot if exists
+    if os.path.exists(plot_filename):
+        os.remove(plot_filename)
+    plt.figure(figsize=(10,6))
+    plt.hist([base_date + timedelta(days=int(d)) for d in completion_dates_np], bins=50, color='skyblue', edgecolor='black')
+    plt.axvline(projected_completion_date_95, color='yellow', linestyle='--', label='{} (95%)'.format(projected_completion_date_95.date()))
+    plt.axvline(projected_completion_date_85, color='red', linestyle='--', label='{} (85%)'.format(projected_completion_date_85.date()))
+    plt.axvline(projected_completion_date_60, color='green', linestyle='--', label='{} (60%)'.format(projected_completion_date_60.date()))
+    plt.title('Estimated Completion Dates of All {} Items'.format(num_items))
+    plt.xlabel('Estimated Completion Date')
+    plt.ylabel('Frequency')
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(plot_filename)
+    plt.close()
+    return projected_dates, plot_filename
 
 @app.route('/', methods=['GET'])
 def index():
@@ -91,14 +114,15 @@ def simulate():
         }
 
         try:
-            results = run_simulation(params)
+            results, plot_filename = run_simulation(params)
         except Exception as e:
             error = f"Simulation error: {str(e)}"
+            plot_filename = None
         finally:
             if csv_file_path and os.path.exists(csv_file_path):
                 os.remove(csv_file_path)
 
-        return render_template('index.html', error=error, results=results)
+        return render_template('index.html', error=error, results=results, plot_filename=plot_filename)
 
     except Exception as e:
         error = f"Unexpected error: {str(e)}"
