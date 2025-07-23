@@ -24,6 +24,26 @@ This project is a web application that simulates project completion dates using 
    ```
 5. Open your web browser and go to `http://127.0.0.1:5000` to access the application.
 
+## Virtual Environment
+
+To run your app in a virtual environment in Visual Studio Code, follow these steps:
+
+1. Use the **Python: Create Environment** command to create a new virtual environment.
+2. Select the environment type (Venv or Conda) from the list.
+3. If creating a Venv environment, select the interpreter to use as a base for the new virtual environment.
+4. Wait for the environment creation process to complete. A notification will show the progress.
+5. Ensure your new environment is selected by using the **Python: Select Interpreter** command.
+6. Open a terminal in VS Code and activate the virtual environment (VS Code usually does this automatically when the interpreter is selected).
+7. Run your app using the terminal.
+
+To activate the Venv virtual environment, execute the following in your VS Code terminal:
+
+>.venv\Scripts\Activate.ps1
+
+To deactivate and return the terminal to the global Python environment, execute the following:
+
+>deactivate
+
 ## Usage Guidelines
 
 - Input the number of items, number of completed items, timeframe in weeks, and any other required parameters in the provided fields.
