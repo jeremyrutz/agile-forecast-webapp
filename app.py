@@ -55,11 +55,10 @@ def run_simulation(params):
         '60%': projected_completion_date_60,
     }
 
-    # Plot histogram and save to static folder
-    plot_filename = 'static/completion_histogram.png'
-    # Ensure static directory exists
-    static_dir = os.path.dirname(plot_filename)
+    # Plot histogram and save to static folder (absolute path)
+    static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
     os.makedirs(static_dir, exist_ok=True)
+    plot_filename = os.path.join(static_dir, 'completion_histogram.png')
     # Delete previous plot if exists
     if os.path.exists(plot_filename):
         os.remove(plot_filename)
@@ -76,7 +75,8 @@ def run_simulation(params):
     plt.tight_layout()
     plt.savefig(plot_filename)
     plt.close()
-    return projected_dates, plot_filename
+    # Return relative path for Flask template usage
+    return projected_dates, 'static/completion_histogram.png'
 
 @app.route('/', methods=['GET'])
 def index():
