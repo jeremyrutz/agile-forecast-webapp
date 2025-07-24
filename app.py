@@ -41,6 +41,7 @@ def load_throughput_data(file_path):
 def run_simulation(params):
     base_date = datetime.strptime(params['start_date'], "%Y-%m-%d") if params['start_date'] else datetime.today()
     throughput_data = load_throughput_data(params['csv_file_path'])
+    params['throughput_data'] = throughput_data  # Add this line
     num_items = params['num_items']
     num_completed = params['num_completed']
     timeframe_weeks = params.get('timeframe_weeks', 1)
