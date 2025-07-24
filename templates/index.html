@@ -19,13 +19,25 @@
                     {% for key, value in results.items() %}
                         <li>{{ key }}: {{ value.strftime('%Y-%m-%d') }}</li>
                     {% endfor %}
-                    {% if plot_filename %}
-                    <div class="plot">
-                        <h3>Completion Date Distribution</h3>
-                        <img src="/{{ plot_filename }}" alt="Completion Histogram" style="max-width:100%;height:auto;border:1px solid #ccc;box-shadow:2px 2px 8px #eee;">
-                    </div>
-                    {% endif %}
                 </ul>
+                {% if params %}
+                <div class="parameters">
+                    <h3>Simulation Parameters Used</h3>
+                    <ul>
+                        <li>Number of Items: {{ params.num_items }}</li>
+                        <li>Number Completed: {{ params.num_completed }}</li>
+                        <li>Timeframe (weeks): {{ params.timeframe_weeks }}</li>
+                        <li>Throughput Sigma: {{ params.throughput_sigma }}</li>
+                        <li>Start Date: {{ params.start_date }}</li>
+                    </ul>
+                </div>
+                {% endif %}
+                {% if plot_filename %}
+                <div class="plot">
+                    <h3>Completion Date Distribution</h3>
+                    <img src="/{{ plot_filename }}" alt="Completion Histogram" style="max-width:100%;height:auto;border:1px solid #ccc;box-shadow:2px 2px 8px #eee;">
+                </div>
+                {% endif %}
             </div>
         {% endif %}
         <form action="/simulate" method="post" enctype="multipart/form-data">
