@@ -20,7 +20,7 @@ def load_throughput_data(file_path):
         raise ValueError("No valid throughput values found in CSV.")
     return throughputs
 
-def calculate_completion_dates(base_date, num_items, num_completed, throughput_data, num_simulations=10000, throughput_sigma, timeframe_weeks):
+def calculate_completion_dates(base_date, num_items, num_completed, throughput_data, num_simulations, throughput_sigma, timeframe_weeks):
     completion_dates = []
     for _ in range(num_simulations):
         completed = num_completed
