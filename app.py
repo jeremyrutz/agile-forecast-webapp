@@ -138,7 +138,7 @@ def simulate():
             if csv_file_path and os.path.exists(csv_file_path):
                 os.remove(csv_file_path)
 
-        return render_template('index.html', error=error, results=results, plot_filename=plot_filename)
+        return render_template('index.html', error=error, results=results, plot_filename=plot_filename, params=params)
 
     except Exception as e:
         error = f"Unexpected error: {str(e)}"
