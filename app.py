@@ -1,3 +1,14 @@
+def get_int_form_value(form, key, default):
+    value = form.get(key)
+    if value is None or value.strip() == '':
+        return default
+    return int(value)
+
+def get_float_form_value(form, key, default):
+    value = form.get(key)
+    if value is None or value.strip() == '':
+        return default
+    return float(value)
 
 from flask import Flask, render_template, request
 import numpy as np
@@ -92,9 +103,9 @@ def simulate():
         try:
             num_items = int(request.form['num_items'])
             num_completed = int(request.form['num_completed'])
-            timeframe_weeks = int(request.form['timeframe_weeks'])
-            throughput_sigma = float(request.form['throughput_sigma'])
-            start_date = request.form.get('start_date', '')
+            timeframe_weeks = get_int_form_value(request.form, 'timeframe_weeks', 1)
+            throughput_sigma = get_float_form_value(request.form, 'throughput_sigma', 10)
+            start_date = request.form.get('start_date') or datetime.today().strftime('%Y-%m-%d')
         except Exception as e:
             error = f"Invalid input: {str(e)}"
             return render_template('index.html', error=error)
