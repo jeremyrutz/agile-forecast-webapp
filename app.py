@@ -79,7 +79,7 @@ def run_simulation(params):
     plt.axvline(projected_completion_date_95, color='yellow', linestyle='--', label='{} (95%)'.format(projected_completion_date_95.date()))
     plt.axvline(projected_completion_date_85, color='red', linestyle='--', label='{} (85%)'.format(projected_completion_date_85.date()))
     plt.axvline(projected_completion_date_60, color='green', linestyle='--', label='{} (60%)'.format(projected_completion_date_60.date()))
-    plt.title('Estimated Completion Dates of All {} Items'.format(num_items))
+    plt.title('Estimated Completion Date for All {} Items'.format(num_items))
     plt.xlabel('Estimated Completion Date')
     plt.ylabel('Frequency')
     plt.xticks(rotation=45)
