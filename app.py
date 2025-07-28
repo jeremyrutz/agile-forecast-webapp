@@ -33,7 +33,7 @@ def index():
 def simulate():
     error = None
     results = None
-    plot_filename = None
+    plot_filename = None  # This will hold the *relative URL* for the template
     csv_file_path = None
 
     try:
@@ -75,11 +75,19 @@ def simulate():
             # Plot histogram
             base_date = datetime.strptime(start_date, "%Y-%m-%d")
             completion_dates_np = np.array([(date - base_date).days for date in completion_dates])
+
+            # Absolute path on disk to save the plot
             static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
             os.makedirs(static_dir, exist_ok=True)
-            plot_filename = os.path.join(static_dir, 'completion_histogram.png')
-            if os.path.exists(plot_filename):
-                os.remove(plot_filename)
+            plot_filename_abs = os.path.join(static_dir, 'completion_histogram.png')
+
+            # Relative URL path to use in HTML template
+            plot_filename = 'completion_histogram.png'
+
+            # Remove existing plot file if exists
+            if os.path.exists(plot_filename_abs):
+                os.remove(plot_filename_abs)
+
             plt.figure(figsize=(10, 6))
             plt.hist([base_date + timedelta(days=int(d)) for d in completion_dates_np], bins=50, color='skyblue', edgecolor='black')
             plt.axvline(results['95%'], color='yellow', linestyle='--', label='{} (95%)'.format(results['95%'].date()))
@@ -91,7 +99,7 @@ def simulate():
             plt.xticks(rotation=45)
             plt.legend()
             plt.tight_layout()
-            plt.savefig(plot_filename)
+            plt.savefig(plot_filename_abs)  # Save to absolute path
             plt.close()
 
         except Exception as e:
@@ -105,7 +113,7 @@ def simulate():
             'index.html',
             error=error,
             results=results,
-            plot_filename='static/completion_histogram.png',
+            plot_filename=plot_filename,  # Pass relative URL here
             params=params
         )
 

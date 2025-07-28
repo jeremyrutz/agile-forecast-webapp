@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Agile Forecasting Simulation</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
     <div class="container">
@@ -29,36 +29,39 @@
                         <li>Timeframe (weeks): {{ params.timeframe_weeks }}</li>
                         <li>Throughput Sigma: {{ params.throughput_sigma }}</li>
                         <li>Start Date: {{ params.start_date }}</li>
+                        <!-- Show throughput_data only if available -->
+                        {% if params.throughput_data %}
                         <li>Throughput Data: {{ params.throughput_data | join(', ') }}</li>
+                        {% endif %}
                     </ul>
                 </div>
                 {% endif %}
                 {% if plot_filename %}
                 <div class="plot">
                     <h3>Completion Date Distribution</h3>
-                    <img src="/{{ plot_filename }}" alt="Completion Histogram" style="max-width:100%;height:auto;border:1px solid #ccc;box-shadow:2px 2px 8px #eee;">
+                    <img src="{{ url_for('static', filename=plot_filename) }}" alt="Completion Histogram" style="max-width:100%; height:auto; border:1px solid #ccc; box-shadow:2px 2px 8px #eee;" />
                 </div>
                 {% endif %}
             </div>
         {% endif %}
         <form action="/simulate" method="post" enctype="multipart/form-data">
             <label for="num_items">Number of Items:</label>
-            <input type="number" id="num_items" name="num_items" required>
+            <input type="number" id="num_items" name="num_items" required />
 
             <label for="num_completed">Number of Completed Items:</label>
-            <input type="number" id="num_completed" name="num_completed" required>
+            <input type="number" id="num_completed" name="num_completed" required />
 
             <label for="timeframe_weeks">Timeframe (weeks) - <i>Default Value = 1</i>:</label>
-            <input type="number" id="timeframe_weeks" name="timeframe_weeks">
+            <input type="number" id="timeframe_weeks" name="timeframe_weeks" />
 
             <label for="throughput_sigma">Throughput Sigma - <i>Default Value = 10</i>:</label>
-            <input type="number" id="throughput_sigma" name="throughput_sigma">
+            <input type="number" id="throughput_sigma" name="throughput_sigma" />
 
             <label for="start_date">Start Date (YYYY-MM-DD) - <i>Default Value = Current Date</i>:</label>
-            <input type="date" id="start_date" name="start_date">
+            <input type="date" id="start_date" name="start_date" />
 
             <label for="csv_file">Upload Throughput CSV:</label>
-            <input type="file" id="csv_file" name="csv_file" accept=".csv" required>
+            <input type="file" id="csv_file" name="csv_file" accept=".csv" required />
 
             <button type="submit">Run Simulation</button>
         </form>
