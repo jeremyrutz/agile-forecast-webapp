@@ -1,8 +1,8 @@
 import os
 import csv
-import random
-from datetime import datetime, timedelta
 import numpy as np
+from datetime import datetime, timedelta
+from scipy.stats import truncnorm  # for truncated normal distribution
 
 def load_throughput_data(file_path):
     if not os.path.isfile(file_path):
@@ -20,14 +20,19 @@ def load_throughput_data(file_path):
         raise ValueError("No valid throughput values found in CSV.")
     return throughputs
 
+def sample_throughput(mean, sigma):
+    a = (0 - mean) / sigma  # lower bound standardized
+    return truncnorm.rvs(a, np.inf, loc=mean, scale=sigma)
+
 def calculate_completion_dates(base_date, num_items, num_completed, throughput_data, num_simulations, throughput_sigma, timeframe_weeks):
     completion_dates = []
     for _ in range(num_simulations):
         completed = num_completed
         current_week = 0
         while completed < num_items:
-            throughput = random.choice(throughput_data)
-            completed += random.normalvariate(throughput / timeframe_weeks, throughput_sigma)
+            throughput = np.random.choice(throughput_data)
+            delta = sample_throughput(throughput / timeframe_weeks, throughput_sigma)
+            completed += delta
             current_week += 1
         completion_date = base_date + timedelta(weeks=current_week)
         completion_dates.append(completion_date)
