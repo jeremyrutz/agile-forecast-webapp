@@ -42,6 +42,7 @@ def calculate_completion_dates(base_date, num_items, num_completed, throughput_d
 def run_simulation(params):
     base_date = datetime.strptime(params['start_date'], "%Y-%m-%d") if params['start_date'] else datetime.today()
     throughput_data = load_throughput_data(params['csv_file_path'])
+    params['throughput_data'] = throughput_data 
     num_items = params['num_items']
     num_completed = params['num_completed']
     num_simulations = 10000

@@ -26,8 +26,8 @@
                     <ul>
                         <li>Number of Items: {{ params.num_items }}</li>
                         <li>Number Completed: {{ params.num_completed }}</li>
-                        <li>Timeframe (weeks): {{ params.timeframe_weeks }}</li>
-                        <li>Throughput Sigma: {{ params.throughput_sigma }}</li>
+                        <li>Throughput Interval (weeks): {{ params.timeframe_weeks }}</li>
+                        <li>Throughput Volatility (Standard Deviation): {{ params.throughput_sigma }}</li>
                         <li>Start Date: {{ params.start_date }}</li>
                         <!-- Show throughput_data only if available -->
                         {% if params.throughput_data %}
@@ -51,10 +51,10 @@
             <label for="num_completed">Number of Completed Items:</label>
             <input type="number" id="num_completed" name="num_completed" required />
 
-            <label for="timeframe_weeks">Timeframe (weeks) - <i>Default Value = 1</i>:</label>
+            <label for="timeframe_weeks">Throughput Interval (weeks) - <i>Default Value = 1</i>:</label>
             <input type="number" id="timeframe_weeks" name="timeframe_weeks" />
 
-            <label for="throughput_sigma">Throughput Sigma - <i>Default Value = 10</i>:</label>
+            <label for="throughput_sigma">Throughput Volatility (Standard Deviation) - <i>Default Value = 10</i>:</label>
             <input type="number" id="throughput_sigma" name="throughput_sigma" />
 
             <label for="start_date">Start Date (YYYY-MM-DD) - <i>Default Value = Current Date</i>:</label>
