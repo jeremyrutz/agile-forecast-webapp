@@ -40,7 +40,15 @@ def simulate():
         # Parse form input
         try:
             num_items = int(request.form['num_items'])
-            num_completed = int(request.form['num_completed'])
+            # num_completed = int(request.form['num_completed'])
+            num_completed = get_int_form_value(request.form, 'num_completed', 0)
+            if num_completed > num_items:
+                raise ValueError("Number of completed items cannot exceed total number of items.")
+            if num_completed < 0:
+                raise ValueError("Number of completed items cannot be negative.")
+            if num_items <= 0:
+                raise ValueError("Number of items must be a positive integer.")
+            
             timeframe_weeks = get_int_form_value(request.form, 'timeframe_weeks', 1)
             throughput_sigma = get_float_form_value(request.form, 'throughput_sigma', 10)
             start_date = request.form.get('start_date') or datetime.today().strftime('%Y-%m-%d')
