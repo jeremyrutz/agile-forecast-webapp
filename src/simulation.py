@@ -24,12 +24,13 @@ def sample_throughput(mean, sigma):
     a = (0 - mean) / sigma  # lower bound standardized to 0
     return truncnorm.rvs(a, np.inf, loc=mean, scale=sigma)
 
-def calculate_completion_dates(base_date, num_items, num_completed, throughput_data,
+def calculate_completion_dates(base_date, num_items_low, num_items_high, num_completed, throughput_data,
                                num_simulations, throughput_sigma, timeframe_weeks):
     completion_dates = []
     for _ in range(num_simulations):
         completed = num_completed
         current_week = 0
+        num_items = np.random.uniform(num_items_low, num_items_high) if num_items_high else num_items_low
         while completed < num_items:
             throughput = np.random.choice(throughput_data)
             delta = sample_throughput(throughput / timeframe_weeks, throughput_sigma)
@@ -42,8 +43,9 @@ def calculate_completion_dates(base_date, num_items, num_completed, throughput_d
 def run_simulation(params):
     base_date = datetime.strptime(params['start_date'], "%Y-%m-%d") if params['start_date'] else datetime.today()
     throughput_data = load_throughput_data(params['csv_file_path'])
-    params['throughput_data'] = throughput_data 
-    num_items = params['num_items']
+    params['throughput_data'] = throughput_data
+    num_items_low = params['num_items_low']
+    num_items_high = params['num_items_high']
     num_completed = params['num_completed']
     num_simulations = 10000
     throughput_sigma = params.get('throughput_sigma', 10)
@@ -51,7 +53,8 @@ def run_simulation(params):
 
     completion_dates = calculate_completion_dates(
         base_date,
-        num_items,
+        num_items_low,
+        num_items_high,
         num_completed,
         throughput_data,
         num_simulations=num_simulations,

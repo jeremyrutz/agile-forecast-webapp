@@ -39,16 +39,21 @@ def simulate():
     try:
         # Parse form input
         try:
-            num_items = int(request.form['num_items'])
-            # num_completed = int(request.form['num_completed'])
+            num_items_low = int(request.form['num_items_low'])
+            num_items_high = int(request.form['num_items_high']) if request.form.get('num_items_high') else None
+            if num_items_high is not None and num_items_high < num_items_low:
+                raise ValueError("High number of items cannot be less than low number of items.")
+                        
             num_completed = get_int_form_value(request.form, 'num_completed', 0)
-            if num_completed > num_items:
+            if num_completed > num_items_low or (num_items_high is not None and num_completed > num_items_high):
                 raise ValueError("Number of completed items cannot exceed total number of items.")
             if num_completed < 0:
                 raise ValueError("Number of completed items cannot be negative.")
-            if num_items <= 0:
-                raise ValueError("Number of items must be a positive integer.")
-            
+            if num_items_low <= 0:
+                raise ValueError("Number of items (low) must be a positive integer.")
+            if num_items_high is not None and num_items_high <= 0:
+                raise ValueError("Number of items (high) must be a positive integer.")
+
             timeframe_weeks = get_int_form_value(request.form, 'timeframe_weeks', 1)
             throughput_sigma = get_float_form_value(request.form, 'throughput_sigma', 10)
             start_date = request.form.get('start_date') or datetime.today().strftime('%Y-%m-%d')
@@ -68,7 +73,8 @@ def simulate():
 
         # Prepare simulation parameters
         params = {
-            'num_items': num_items,
+            'num_items_low': num_items_low,
+            'num_items_high': num_items_high,
             'num_completed': num_completed,
             'timeframe_weeks': timeframe_weeks,
             'throughput_sigma': throughput_sigma,
@@ -101,7 +107,7 @@ def simulate():
             plt.axvline(results['95%'], color='yellow', linestyle='--', label='{} (95%)'.format(results['95%'].date()))
             plt.axvline(results['85%'], color='red', linestyle='--', label='{} (85%)'.format(results['85%'].date()))
             plt.axvline(results['60%'], color='green', linestyle='--', label='{} (60%)'.format(results['60%'].date()))
-            plt.title(f'Estimated Completion Date for All {num_items} Items')
+            plt.title(f'Estimated Completion Date for All {num_items_low} to {num_items_high} Items')
             plt.xlabel('Estimated Completion Date')
             plt.ylabel('Frequency')
             plt.xticks(rotation=45)

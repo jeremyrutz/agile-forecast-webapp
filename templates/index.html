@@ -24,7 +24,8 @@
                 <div class="parameters">
                     <h3>Simulation Parameters Used</h3>
                     <ul>
-                        <li>Number of Items: {{ params.num_items }}</li>
+                        <li>Number of Items (low): {{ params.num_items_low }}</li>
+                        <li>Number of Items (high): {{ params.num_items_high }}</li>
                         <li>Number Completed: {{ params.num_completed }}</li>
                         <li>Throughput Interval (weeks): {{ params.timeframe_weeks }}</li>
                         <li>Throughput Volatility (Standard Deviation): {{ params.throughput_sigma }}</li>
@@ -45,8 +46,11 @@
             </div>
         {% endif %}
         <form action="/simulate" method="post" enctype="multipart/form-data">
-            <label for="num_items">Number of Items:</label>
-            <input type="number" id="num_items" name="num_items" required />
+            <label for="num_items_low">Number of Items (Low):</label>
+            <input type="number" id="num_items_low" name="num_items_low" required />
+
+            <label for="num_items_high">Number of Items (High): <i>Leave blank for no upper limit</i></label>
+            <input type="number" id="num_items_high" name="num_items_high" />
 
             <label for="num_completed">Number of Completed Items: - <i>Default Value = 0</i>:</label>
             <input type="number" id="num_completed" name="num_completed" />
