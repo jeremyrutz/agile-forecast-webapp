@@ -55,6 +55,10 @@ def simulate():
                 raise ValueError("Number of items (high) must be a positive integer.")
 
             timeframe_weeks = get_int_form_value(request.form, 'timeframe_weeks', 1)
+            item_focus = get_float_form_value(request.form, 'item_focus', 100)  # Default to 100%
+            if item_focus < 0 or item_focus > 100:
+                raise ValueError("Item focus must be between 0 and 100 percent.")
+            
             throughput_sigma = get_float_form_value(request.form, 'throughput_sigma', 10)
             start_date = request.form.get('start_date') or datetime.today().strftime('%Y-%m-%d')
         except Exception as e:
@@ -77,6 +81,7 @@ def simulate():
             'num_items_high': num_items_high,
             'num_completed': num_completed,
             'timeframe_weeks': timeframe_weeks,
+            'item_focus': item_focus,
             'throughput_sigma': throughput_sigma,
             'start_date': start_date,
             'csv_file_path': csv_file_path
