@@ -50,8 +50,8 @@ def run_simulation(params):
     item_focus = params['item_focus']
     item_completion_percentage = params['item_completion_percentage']
     num_simulations = 10000
-    throughput_sigma = params.get('throughput_sigma', 10)
-    timeframe_weeks = params.get('timeframe_weeks', 1)
+    throughput_sigma = params['throughput_sigma']
+    timeframe_weeks = params['timeframe_weeks']
     
 
     completion_dates = calculate_completion_dates(
