@@ -25,12 +25,12 @@ def sample_throughput(mean, sigma):
     return truncnorm.rvs(a, np.inf, loc=mean, scale=sigma)
 
 def calculate_completion_dates(base_date, num_items_low, num_items_high, num_completed, throughput_data,
-                               item_focus, num_simulations, throughput_sigma, timeframe_weeks):
+                               item_focus, item_completion_percentage, num_simulations, throughput_sigma, timeframe_weeks):
     completion_dates = []
     for _ in range(num_simulations):
         completed = num_completed
         current_week = 0
-        num_items = np.random.uniform(num_items_low, num_items_high) if num_items_high else num_items_low
+        num_items = (item_completion_percentage / 100) * (np.random.uniform(num_items_low, num_items_high) if num_items_high else num_items_low)
         while completed < num_items:
             throughput = (item_focus / 100) * np.random.choice(throughput_data)
             delta = sample_throughput(throughput / timeframe_weeks, throughput_sigma)
@@ -48,6 +48,7 @@ def run_simulation(params):
     num_items_high = params['num_items_high']
     num_completed = params['num_completed']
     item_focus = params['item_focus']
+    item_completion_percentage = params['item_completion_percentage']
     num_simulations = 10000
     throughput_sigma = params.get('throughput_sigma', 10)
     timeframe_weeks = params.get('timeframe_weeks', 1)
@@ -60,6 +61,7 @@ def run_simulation(params):
         num_completed,
         throughput_data,
         item_focus,
+        item_completion_percentage,
         num_simulations=num_simulations,
         throughput_sigma=throughput_sigma,
         timeframe_weeks=timeframe_weeks,

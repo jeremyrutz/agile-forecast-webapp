@@ -54,11 +54,15 @@ def simulate():
             if num_items_high is not None and num_items_high <= 0:
                 raise ValueError("Number of items (high) must be a positive integer.")
 
-            timeframe_weeks = get_int_form_value(request.form, 'timeframe_weeks', 1)
+            timeframe_weeks = get_int_form_value(request.form, 'timeframe_weeks', 4)
             item_focus = get_float_form_value(request.form, 'item_focus', 100)  # Default to 100%
             if item_focus < 0 or item_focus > 100:
                 raise ValueError("Item focus must be between 0 and 100 percent.")
             
+            item_completion_percentage = get_float_form_value(request.form, 'item_completion_percentage', 100)  
+            if item_completion_percentage < 0 or item_completion_percentage > 100:
+                raise ValueError("Item completion percentage must be between 0 and 100 percent.")
+
             throughput_sigma = get_float_form_value(request.form, 'throughput_sigma', 10)
             start_date = request.form.get('start_date') or datetime.today().strftime('%Y-%m-%d')
         except Exception as e:
@@ -82,6 +86,7 @@ def simulate():
             'num_completed': num_completed,
             'timeframe_weeks': timeframe_weeks,
             'item_focus': item_focus,
+            'item_completion_percentage': item_completion_percentage,
             'throughput_sigma': throughput_sigma,
             'start_date': start_date,
             'csv_file_path': csv_file_path
@@ -112,7 +117,7 @@ def simulate():
             plt.axvline(results['95%'], color='yellow', linestyle='--', label='{} (95%)'.format(results['95%'].date()))
             plt.axvline(results['85%'], color='red', linestyle='--', label='{} (85%)'.format(results['85%'].date()))
             plt.axvline(results['60%'], color='green', linestyle='--', label='{} (60%)'.format(results['60%'].date()))
-            plt.title(f'Estimated Completion Date for All {num_items_low} to {num_items_high} Items')
+            plt.title(f'Estimated Completion Date for {item_completion_percentage}% of All {num_items_low} to {num_items_high} Items')
             plt.xlabel('Estimated Completion Date')
             plt.ylabel('Frequency')
             plt.xticks(rotation=45)

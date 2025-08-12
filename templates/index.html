@@ -29,6 +29,7 @@
                         <li>Number Completed: {{ params.num_completed }}</li>
                         <li>Throughput Interval (weeks): {{ params.timeframe_weeks }}</li>
                         <li>Team Focus on this work (%): {{ params.item_focus }}</li>
+                        <li>Target Completion Percentage (%): {{ params.item_completion_percentage }}</li>
                         <li>Throughput Volatility (Standard Deviation): {{ params.throughput_sigma }}</li>
                         <li>Start Date: {{ params.start_date }}</li>
                         <!-- Show throughput_data only if available -->
@@ -54,16 +55,19 @@
             <input type="number" id="num_items_high" name="num_items_high" />
 
             <label for="num_completed">Number of Completed Items: - <i>Default Value = 0</i>:</label>
-            <input type="number" id="num_completed" name="num_completed" />
+            <input type="number" id="num_completed" name="num_completed" value="0"/>
 
-            <label for="timeframe_weeks">Throughput Interval (weeks) - <i>Default Value = 1</i>:</label>
-            <input type="number" id="timeframe_weeks" name="timeframe_weeks" />
+            <label for="timeframe_weeks">Throughput Interval (weeks) - <i>Default Value = 4</i>:</label>
+            <input type="number" id="timeframe_weeks" name="timeframe_weeks" value="4"/>
 
             <label for="item_focus">Team Focus on this Work in Percentage (%) <i>Default Value = 100</i>:</label>
-            <input type="number" id="item_focus" name="item_focus" />
+            <input type="number" id="item_focus" name="item_focus" value="100" />
+
+            <label for="item_completion_percentage">Target Completion Percentage (%) - <i>Default Value - 100</i>:</label>
+            <input type="number" id="item_completion_percentage" name="item_completion_percentage" value="100" />
 
             <label for="throughput_sigma">Throughput Volatility (Standard Deviation) - <i>Default Value = 10</i>:</label>
-            <input type="number" id="throughput_sigma" name="throughput_sigma" />
+            <input type="number" id="throughput_sigma" name="throughput_sigma" value="10" />
 
             <label for="start_date">Start Date (YYYY-MM-DD) - <i>Default Value = Current Date</i>:</label>
             <input type="date" id="start_date" name="start_date" />
