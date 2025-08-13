@@ -21,8 +21,8 @@ def load_throughput_data(file_path):
     return throughputs
 
 def sample_throughput(mean, sigma):
-    a = (0 - mean) / sigma  # lower bound standardized to 0
-    return truncnorm.rvs(a, np.inf, loc=mean, scale=sigma)
+    a = (0 - mean) / sigma if sigma > 0 else -np.inf
+    return truncnorm.rvs(a, np.inf, loc=mean, scale=sigma) if sigma > 0 else mean
 
 def calculate_completion_dates(base_date, num_items_low, num_items_high, num_completed, throughput_data,
                                item_focus, item_completion_percentage, num_simulations, throughput_sigma, timeframe_weeks):

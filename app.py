@@ -63,7 +63,7 @@ def simulate():
             if item_completion_percentage < 0 or item_completion_percentage > 100:
                 raise ValueError("Item completion percentage must be between 0 and 100 percent.")
 
-            throughput_sigma = get_float_form_value(request.form, 'throughput_sigma', 10)
+            throughput_sigma = get_float_form_value(request.form, 'throughput_sigma', 1)
             start_date = request.form.get('start_date') or datetime.today().strftime('%Y-%m-%d')
         except Exception as e:
             error = f"Invalid input: {str(e)}"
